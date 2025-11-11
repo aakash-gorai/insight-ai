@@ -1,8 +1,7 @@
 # 🧠 InsightAI  
 > **Chat with your Documents and Webpages using AI**
 
-**InsightAI** is an **AI-powered assistant** that allows users to upload **PDF documents** or provide **URLs**, and then **chat** with their content.  
-It uses **Retrieval-Augmented Generation (RAG)** to extract relevant information, summarize sections, and answer questions contextually — powered by **LangChain**, **ChromaDB**, and modern **LLMs** (like GPT-4 or LLaMA).
+**InsightAI** is an **AI-powered assistant** that allows users to upload **PDF documents** or provide **URLs**, and then **chat** with their content. It uses **Retrieval-Augmented Generation (RAG)** to extract relevant information, summarize sections, and answer questions contextually — powered by **LangChain**, **ChromaDB**, and modern **LLMs** (like GPT-4 or LLaMA).
 
 ---
 

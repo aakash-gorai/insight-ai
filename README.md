@@ -27,5 +27,3 @@ It uses **Retrieval-Augmented Generation (RAG)** to extract relevant information
 | **Storage** | Local / AWS S3 |
 | **Deployment** | Vercel (frontend) + Render / AWS (backend) |
 
-
-## 🏗️ Architecture

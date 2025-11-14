@@ -1,5 +1,25 @@
+# Ignore Python files
 __pycache__/
 *.pyc
-.env
+*.pyo
+*.pyd
+
+# Virtual environments
 venv/
+env/
+.venv/
+
+# Ignore Git + cache
 .git
+.gitignore
+*.log
+
+# Ignore frontend + node stuff
+node_modules/
+frontend/
+
+# Ignore environment files
+.env
+
+# OS cache
+.DS_Store

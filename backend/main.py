@@ -92,6 +92,9 @@ class ChatRequest(BaseModel):
 def health_check():
     return {"message": "InsightAI Backend is running 🚀"}
 
+@app.head("/health")
+def head_check():
+    return
 
 # -----------------------------
 # 📌 UPLOAD API

@@ -19,6 +19,7 @@ export default function ChatPage() {
 
   // check session
   useEffect(() => {
+    if (typeof window === "undefined") return;
     const session_id = sessionStorage.getItem("session_id");
     if (!session_id) {
       toast.error("Please upload a file before chatting.");
@@ -45,6 +46,7 @@ export default function ChatPage() {
 
   // idle timeout
   useEffect(() => {
+    if (typeof window === "undefined") return;
     const IDLE_TIMEOUT = 15 * 60 * 1000;
     const session_id = sessionStorage.getItem("session_id");
     if (!session_id) return;
@@ -77,6 +79,7 @@ export default function ChatPage() {
   }, []);
 
   async function sendMessage() {
+    if (typeof window === "undefined") return;
     const session_id = sessionStorage.getItem("session_id");
     if (!session_id) {
       toast.error("Session expired. Please re-upload.");
@@ -105,7 +108,9 @@ export default function ChatPage() {
     }
   }
 
-  const source = sessionStorage.getItem("source_name") || "your document";
+  const source = typeof window !== "undefined" 
+    ? sessionStorage.getItem("source_name") || "your document"
+    : "your document";
 
   return (
     <main className="flex flex-col h-screen bg-gradient-to-br from-black via-gray-900 to-gray-800 p-6 text-gray-200">
@@ -124,6 +129,7 @@ export default function ChatPage() {
 
           <button
             onClick={() => {
+              if (typeof window === "undefined") return;
               const sid = sessionStorage.getItem("session_id");
               if (sid) {
                 fetch(`${api}/delete-session?session_id=${sid}`, {

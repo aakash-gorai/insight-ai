@@ -29,8 +29,11 @@ COLLECTION_PREFIX = "insightai_"
 # --------------------------
 # Models
 # --------------------------
-embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
-llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash-exp", temperature=0.2)
+embeddings = GoogleGenerativeAIEmbeddings(
+    model="models/text-embedding-004",
+    google_api_key=os.getenv("GOOGLE_API_KEY")
+)
+llm = ChatGoogleGenerativeAI(model="models/gemini-2.5-flash", temperature=0.2)
 
 # Gemini embeddings have fixed dimension of 768
 EMBED_DIM = 768

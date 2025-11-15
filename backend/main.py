@@ -69,11 +69,11 @@ threading.Thread(target=cleanup_idle_sessions, daemon=True).start()
 # -----------------------------
 app = FastAPI(title="InsightAI Backend", version="1.0")
 
-FRONTEND_URL = os.getenv("FRONTEND_URL")
+FRONTEND_URLS = os.getenv("FRONTEND_URLS", "").split(",")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[FRONTEND_URL],
+    allow_origins=[FRONTEND_URLS],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"]

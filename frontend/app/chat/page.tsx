@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = "error"; 
+
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";

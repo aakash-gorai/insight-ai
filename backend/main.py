@@ -73,7 +73,7 @@ FRONTEND_URLS = os.getenv("FRONTEND_URLS", "").split(",")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[FRONTEND_URLS],
+    allow_origins=FRONTEND_URLS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"]

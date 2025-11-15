@@ -1,7 +1,5 @@
 "use client";
 
-export const dynamic = "error"; 
-
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
@@ -111,12 +109,15 @@ export default function ChatPage() {
     <main className="flex flex-col h-screen bg-gradient-to-br from-black via-gray-900 to-gray-800 p-6 text-gray-200">
       {/* Outer card - MUST have h-full and min-h-0 */}
       <div className="max-w-3xl w-full mx-auto flex flex-col h-full min-h-0 bg-gray-900/70 backdrop-blur-md rounded-2xl shadow-xl border border-gray-700 p-6">
-        
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h1 className="text-3xl font-bold text-white">💬 Chat with {source}</h1>
-            <p className="text-sm text-gray-400">Ask questions about the uploaded content.</p>
+            <h1 className="text-3xl font-bold text-white">
+              💬 Chat with {source}
+            </h1>
+            <p className="text-sm text-gray-400">
+              Ask questions about the uploaded content.
+            </p>
           </div>
 
           <button
@@ -148,7 +149,9 @@ export default function ChatPage() {
             {messages.map((m, i) => (
               <div
                 key={i}
-                className={`w-full flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
+                className={`w-full flex ${
+                  m.role === "user" ? "justify-end" : "justify-start"
+                }`}
               >
                 <div
                   className={`
@@ -156,7 +159,11 @@ export default function ChatPage() {
                     break-words
                     p-3
                     rounded-xl
-                    ${m.role === "user" ? "bg-blue-600 text-white" : "bg-gray-700 text-gray-200"}
+                    ${
+                      m.role === "user"
+                        ? "bg-blue-600 text-white"
+                        : "bg-gray-700 text-gray-200"
+                    }
                   `}
                 >
                   <b className="block text-xs opacity-70 mb-1">
@@ -192,7 +199,6 @@ export default function ChatPage() {
             </button>
           </div>
         </div>
-
       </div>
     </main>
   );

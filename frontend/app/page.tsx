@@ -13,10 +13,41 @@ export default function UploadPage() {
   const router = useRouter();
   const api = process.env.NEXT_PUBLIC_INSIGHTAI_API_BASE_URL;
 
+  // Allowed file types
+  const allowedTypes = ["application/pdf", 
+                        "application/vnd.openxmlformats-officedocument.wordprocessingml.document", 
+                        "text/plain"];
+
+  // Validate URL format
+  function isValidUrl(testUrl: string) {
+    try {
+      const parsed = new URL(testUrl);
+      return parsed.protocol === "http:" || parsed.protocol === "https:";
+    } catch {
+      return false;
+    }
+  }
+
   async function handleUpload() {
     if (!file && !url && !text) {
       toast.error("Please provide a file, URL, or text.");
       return;
+    }
+
+    // File validation
+    if (file) {
+      if (!allowedTypes.includes(file.type)) {
+        toast.error("Invalid file type. Only PDF, DOCX, and TXT are allowed.");
+        return;
+      }
+    }
+
+    // URL validation
+    if (url) {
+      if (!isValidUrl(url)) {
+        toast.error("Please enter a valid URL starting with http:// or https://");
+        return;
+      }
     }
 
     const formData = new FormData();
@@ -70,7 +101,15 @@ export default function UploadPage() {
             <input
               type="file"
               accept=".pdf,.docx,.txt"
-              onChange={(e) => setFile(e.target.files?.[0] || null)}
+              onChange={(e) => {
+                const selected = e.target.files?.[0] || null;
+                if (selected && !allowedTypes.includes(selected.type)) {
+                  toast.error("Invalid file type. Only PDF, DOCX and TXT allowed.");
+                  e.target.value = ""; // reset input
+                  return;
+                }
+                setFile(selected);
+              }}
               className="mt-2 block w-full text-gray-200
                 file:bg-gray-800 file:border-0 file:px-4 file:py-2 
                 file:rounded file:text-gray-300 file:hover:bg-gray-700"
@@ -79,9 +118,7 @@ export default function UploadPage() {
 
           {/* URL Input */}
           <label className="block">
-            <span className="text-sm font-medium text-gray-300">
-              Or enter a URL
-            </span>
+            <span className="text-sm font-medium text-gray-300">Or enter a URL</span>
             <input
               value={url}
               onChange={(e) => setUrl(e.target.value)}
@@ -93,9 +130,7 @@ export default function UploadPage() {
 
           {/* Text Input */}
           <label className="block">
-            <span className="text-sm font-medium text-gray-300">
-              Or paste raw text
-            </span>
+            <span className="text-sm font-medium text-gray-300">Or paste raw text</span>
             <textarea
               value={text}
               onChange={(e) => setText(e.target.value)}
@@ -118,7 +153,7 @@ export default function UploadPage() {
             </button>
 
             <p className="text-xs text-gray-500">
-              Session expired about 15 mins of inactivity.
+              Sessions expire after 15 minutes of inactivity.
             </p>
           </div>
         </div>

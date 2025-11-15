@@ -12,12 +12,6 @@ langchain-community==0.3.31
 langchain-core==0.3.79
 langchain-text-splitters==0.3.11
 langchain-google-genai==2.0.10
-langchain-huggingface==0.3.1
-
-# HuggingFace Embeddings
-sentence-transformers==5.1.2
-transformers==4.57.1
-tokenizers==0.22.1
 
 # File loaders
 pypdf==6.2.0

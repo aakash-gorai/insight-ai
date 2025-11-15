@@ -1,7 +1,6 @@
 import os
 from dotenv import load_dotenv
-from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 from langchain_qdrant import QdrantVectorStore
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.chains import RetrievalQA
@@ -30,11 +29,11 @@ COLLECTION_PREFIX = "insightai_"
 # --------------------------
 # Models
 # --------------------------
-embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.2)
+embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash-exp", temperature=0.2)
 
-sample_vec = embeddings.embed_query("test")
-EMBED_DIM = len(sample_vec)
+# Gemini embeddings have fixed dimension of 768
+EMBED_DIM = 768
 
 
 # --------------------------

@@ -113,10 +113,10 @@ async def upload_source(
 
     print(f"🆕 Creating new collection: {collection_name}")
 
-    # Create Qdrant collection
+    # Create Qdrant collection (768 for Gemini embeddings)
     qdrant.create_collection(
         collection_name=collection_name,
-        vectors_config=VectorParams(size=384, distance="Cosine")
+        vectors_config=VectorParams(size=768, distance="Cosine")
     )
 
     # ----- CASE 1: FILE -----

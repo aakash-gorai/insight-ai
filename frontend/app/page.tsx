@@ -61,7 +61,7 @@ export default function UploadPage() {
         sessionStorage.setItem("session_id", res.data.session_id);
         sessionStorage.setItem("source_name", file?.name || url || "Raw Text");
 
-        toast.success("Uploaded! Redirecting...");
+        toast.success("Uploaded! You can start chatting now.");
         router.push("/chat");
       } else {
         toast.error("Upload failed: no session ID returned.");
@@ -76,7 +76,6 @@ export default function UploadPage() {
   return (
     <main className="flex flex-col h-[calc(var(--real-vh)*100)] overflow-hidden bg-gradient-to-b from-black via-gray-900 to-gray-800">
       <div className="w-full max-w-lg mx-auto flex flex-col flex-1 min-h-0 px-4 py-10">
-
         <div className="w-full bg-gray-900/80 backdrop-blur-xl p-6 sm:p-8 rounded-2xl shadow-xl border border-gray-800">
           <h1 className="text-3xl sm:text-4xl font-bold mb-2 text-white text-center">
             💡 InsightAI
@@ -86,9 +85,10 @@ export default function UploadPage() {
           </p>
 
           <div className="space-y-6">
-
             <label className="block">
-              <span className="text-sm font-medium text-gray-300">Upload file</span>
+              <span className="text-sm font-medium text-gray-300">
+                Upload file
+              </span>
               <input
                 type="file"
                 accept=".pdf,.docx,.txt"
@@ -107,7 +107,9 @@ export default function UploadPage() {
             </label>
 
             <label className="block">
-              <span className="text-sm font-medium text-gray-300">Enter a URL</span>
+              <span className="text-sm font-medium text-gray-300">
+                Enter a URL
+              </span>
               <input
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
@@ -118,7 +120,9 @@ export default function UploadPage() {
             </label>
 
             <label className="block">
-              <span className="text-sm font-medium text-gray-300">Paste raw text</span>
+              <span className="text-sm font-medium text-gray-300">
+                Paste raw text
+              </span>
               <textarea
                 value={text}
                 onChange={(e) => setText(e.target.value)}

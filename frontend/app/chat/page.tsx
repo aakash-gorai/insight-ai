@@ -121,7 +121,7 @@ export default function ChatPage() {
       : "your document";
 
   return (
-    <main className="flex flex-col h-[100svh] bg-gradient-to-b from-black via-gray-900 to-gray-800 px-3 sm:px-6 py-4 text-gray-200">
+    <main className="flex flex-col h-[100svh] min-h-0 overflow-hidden bg-gradient-to-b from-black via-gray-900 to-gray-800 px-3 sm:px-6 py-4 text-gray-200">
       <div className="w-full max-w-3xl mx-auto flex flex-col h-full min-h-0 rounded-2xl bg-gray-900/70 backdrop-blur-xl shadow-xl border border-gray-800 p-4 sm:p-6">
 
         {/* Header */}

@@ -74,10 +74,9 @@ export default function UploadPage() {
   }
 
   return (
-    <main className="flex flex-col h-[100svh] overflow-hidden bg-gradient-to-b from-black via-gray-900 to-gray-800">
+    <main className="flex flex-col h-[calc(var(--real-vh)*100)] overflow-hidden bg-gradient-to-b from-black via-gray-900 to-gray-800">
       <div className="w-full max-w-lg mx-auto flex flex-col flex-1 min-h-0 px-4 py-10">
-        
-        {/* Card */}
+
         <div className="w-full bg-gray-900/80 backdrop-blur-xl p-6 sm:p-8 rounded-2xl shadow-xl border border-gray-800">
           <h1 className="text-3xl sm:text-4xl font-bold mb-2 text-white text-center">
             💡 InsightAI
@@ -88,7 +87,6 @@ export default function UploadPage() {
 
           <div className="space-y-6">
 
-            {/* File Upload */}
             <label className="block">
               <span className="text-sm font-medium text-gray-300">Upload file</span>
               <input
@@ -108,7 +106,6 @@ export default function UploadPage() {
               />
             </label>
 
-            {/* URL Input */}
             <label className="block">
               <span className="text-sm font-medium text-gray-300">Enter a URL</span>
               <input
@@ -120,7 +117,6 @@ export default function UploadPage() {
               />
             </label>
 
-            {/* Text Input */}
             <label className="block">
               <span className="text-sm font-medium text-gray-300">Paste raw text</span>
               <textarea

@@ -18,7 +18,6 @@ export default function ChatPage() {
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const api = process.env.NEXT_PUBLIC_INSIGHTAI_API_BASE_URL;
 
-  // Check session
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -41,12 +40,10 @@ export default function ChatPage() {
     return () => window.removeEventListener("beforeunload", handleUnload);
   }, []);
 
-  // Scroll bottom
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   }, [messages]);
 
-  // Idle timeout
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -81,7 +78,6 @@ export default function ChatPage() {
     };
   }, []);
 
-  // Send message
   async function sendMessage() {
     if (!input.trim()) return;
 
@@ -121,10 +117,9 @@ export default function ChatPage() {
       : "your document";
 
   return (
-    <main className="flex flex-col h-[100svh] min-h-0 overflow-hidden bg-gradient-to-b from-black via-gray-900 to-gray-800 px-3 sm:px-6 py-4 text-gray-200">
+    <main className="flex flex-col h-[calc(var(--real-vh)*100)] overflow-hidden bg-gradient-to-b from-black via-gray-900 to-gray-800 px-3 sm:px-6 py-4 text-gray-200">
       <div className="w-full max-w-3xl mx-auto flex flex-col h-full min-h-0 rounded-2xl bg-gray-900/70 backdrop-blur-xl shadow-xl border border-gray-800 p-4 sm:p-6">
 
-        {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
           <div className="text-center sm:text-left">
             <h1 className="text-2xl sm:text-3xl font-bold text-white">
@@ -135,7 +130,6 @@ export default function ChatPage() {
             </p>
           </div>
 
-          {/* End Chat Button */}
           <button
             onClick={() => {
               const sid = sessionStorage.getItem("session_id");
@@ -153,7 +147,6 @@ export default function ChatPage() {
           </button>
         </div>
 
-        {/* Chat Area */}
         <div className="flex-1 min-h-0 overflow-y-auto rounded-xl bg-gray-800/40 border border-gray-700">
           <div className="flex flex-col gap-3 p-3 sm:p-4">
             {messages.length === 0 && (
@@ -186,7 +179,6 @@ export default function ChatPage() {
           </div>
         </div>
 
-        {/* Input Bar */}
         <div className="mt-3 sm:mt-4">
           <div className="flex gap-2">
             <input

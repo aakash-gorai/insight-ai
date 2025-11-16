@@ -21,6 +21,7 @@ export default function ChatPage() {
   // Check session
   useEffect(() => {
     if (typeof window === "undefined") return;
+
     const session_id = sessionStorage.getItem("session_id");
     if (!session_id) {
       toast.error("Please upload a file before chatting.");
@@ -40,7 +41,7 @@ export default function ChatPage() {
     return () => window.removeEventListener("beforeunload", handleUnload);
   }, []);
 
-  // Scroll to bottom when messages change
+  // Scroll to bottom
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   }, [messages]);
@@ -49,7 +50,7 @@ export default function ChatPage() {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const IDLE_TIMEOUT = 15 * 60 * 1000;
+    const IDLE_TIMEOUT = 15 * 60 * 1000; // 15 min
     const session_id = sessionStorage.getItem("session_id");
     if (!session_id) return;
 
@@ -80,8 +81,9 @@ export default function ChatPage() {
     };
   }, []);
 
+  // Send message
   async function sendMessage() {
-    if (typeof window === "undefined") return;
+    if (!input.trim()) return;
 
     const session_id = sessionStorage.getItem("session_id");
     if (!session_id) {
@@ -89,10 +91,10 @@ export default function ChatPage() {
       router.push("/");
       return;
     }
-    if (!input.trim()) return;
 
-    const userMsg = { role: "user", text: input.trim() };
+    const userMsg: Message = { role: "user", text: input.trim() };
     setMessages((prev) => [...prev, userMsg]);
+
     setInput("");
     setLoading(true);
 
@@ -102,8 +104,10 @@ export default function ChatPage() {
         prompt: userMsg.text,
       });
 
-      const aiText = res.data.response || "No response.";
-      setMessages((prev) => [...prev, { role: "ai", text: aiText }]);
+      const aiText: string = res.data.response || "No response.";
+      const aiMsg: Message = { role: "ai", text: aiText };
+
+      setMessages((prev) => [...prev, aiMsg]);
     } catch (err: any) {
       toast.error(err?.response?.data?.detail || "Chat failed.");
     } finally {
@@ -118,12 +122,10 @@ export default function ChatPage() {
 
   return (
     <main className="flex flex-col h-screen bg-gradient-to-b from-black via-gray-900 to-gray-800 px-3 sm:px-6 py-4 text-gray-200">
-      {/* Outer card */}
       <div className="w-full max-w-3xl mx-auto flex flex-col h-full min-h-0 rounded-2xl bg-gray-900/70 backdrop-blur-xl shadow-xl border border-gray-800 p-4 sm:p-6">
 
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
-
           <div className="text-center sm:text-left">
             <h1 className="text-2xl sm:text-3xl font-bold text-white">
               💬 Chat with {source}
@@ -133,10 +135,9 @@ export default function ChatPage() {
             </p>
           </div>
 
-          {/* SMALL button on mobile, normal on desktop */}
+          {/* End Chat Button */}
           <button
             onClick={() => {
-              if (typeof window === "undefined") return;
               const sid = sessionStorage.getItem("session_id");
               if (sid) {
                 fetch(`${api}/delete-session?session_id=${sid}`, {
@@ -150,10 +151,9 @@ export default function ChatPage() {
           >
             End Chat
           </button>
-
         </div>
 
-        {/* Chat area */}
+        {/* Chat Area */}
         <div className="flex-1 min-h-0 overflow-y-auto rounded-xl bg-gray-800/40 border border-gray-700">
           <div className="flex flex-col gap-3 p-3 sm:p-4">
             {messages.length === 0 && (
@@ -165,9 +165,7 @@ export default function ChatPage() {
             {messages.map((m, i) => (
               <div
                 key={i}
-                className={`flex ${
-                  m.role === "user" ? "justify-end" : "justify-start"
-                }`}
+                className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
               >
                 <div
                   className={`max-w-[85%] sm:max-w-[75%] break-words p-3 rounded-xl text-sm sm:text-base ${
@@ -188,7 +186,7 @@ export default function ChatPage() {
           </div>
         </div>
 
-        {/* Input bar */}
+        {/* Input Bar */}
         <div className="mt-3 sm:mt-4">
           <div className="flex gap-2">
             <input

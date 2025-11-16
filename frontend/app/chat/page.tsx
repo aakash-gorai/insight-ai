@@ -13,11 +13,12 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+
   const router = useRouter();
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const api = process.env.NEXT_PUBLIC_INSIGHTAI_API_BASE_URL;
 
-  // check session
+  // Check session
   useEffect(() => {
     if (typeof window === "undefined") return;
     const session_id = sessionStorage.getItem("session_id");
@@ -39,14 +40,15 @@ export default function ChatPage() {
     return () => window.removeEventListener("beforeunload", handleUnload);
   }, []);
 
-  // scroll when messages change
+  // Scroll to bottom when messages change
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   }, [messages]);
 
-  // idle timeout
+  // Idle timeout
   useEffect(() => {
     if (typeof window === "undefined") return;
+
     const IDLE_TIMEOUT = 15 * 60 * 1000;
     const session_id = sessionStorage.getItem("session_id");
     if (!session_id) return;
@@ -80,6 +82,7 @@ export default function ChatPage() {
 
   async function sendMessage() {
     if (typeof window === "undefined") return;
+
     const session_id = sessionStorage.getItem("session_id");
     if (!session_id) {
       toast.error("Session expired. Please re-upload.");
@@ -88,7 +91,7 @@ export default function ChatPage() {
     }
     if (!input.trim()) return;
 
-    const userMsg: Message = { role: "user", text: input.trim() };
+    const userMsg = { role: "user", text: input.trim() };
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
     setLoading(true);
@@ -108,25 +111,29 @@ export default function ChatPage() {
     }
   }
 
-  const source = typeof window !== "undefined" 
-    ? sessionStorage.getItem("source_name") || "your document"
-    : "your document";
+  const source =
+    typeof window !== "undefined"
+      ? sessionStorage.getItem("source_name") || "your document"
+      : "your document";
 
   return (
-    <main className="flex flex-col h-screen bg-gradient-to-br from-black via-gray-900 to-gray-800 p-6 text-gray-200">
-      {/* Outer card - MUST have h-full and min-h-0 */}
-      <div className="max-w-3xl w-full mx-auto flex flex-col h-full min-h-0 bg-gray-900/70 backdrop-blur-md rounded-2xl shadow-xl border border-gray-700 p-6">
+    <main className="flex flex-col h-screen bg-gradient-to-b from-black via-gray-900 to-gray-800 px-3 sm:px-6 py-4 text-gray-200">
+      {/* Outer card */}
+      <div className="w-full max-w-3xl mx-auto flex flex-col h-full min-h-0 rounded-2xl bg-gray-900/70 backdrop-blur-xl shadow-xl border border-gray-800 p-4 sm:p-6">
+
         {/* Header */}
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h1 className="text-3xl font-bold text-white">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+
+          <div className="text-center sm:text-left">
+            <h1 className="text-2xl sm:text-3xl font-bold text-white">
               💬 Chat with {source}
             </h1>
-            <p className="text-sm text-gray-400">
+            <p className="text-xs sm:text-sm text-gray-400">
               Ask questions about the uploaded content.
             </p>
           </div>
 
+          {/* SMALL button on mobile, normal on desktop */}
           <button
             onClick={() => {
               if (typeof window === "undefined") return;
@@ -139,17 +146,18 @@ export default function ChatPage() {
               sessionStorage.clear();
               router.push("/");
             }}
-            className="text-sm px-3 py-1 border rounded-lg text-gray-300 border-gray-600 hover:bg-gray-800 transition"
+            className="px-3 py-1.5 text-xs sm:text-sm border border-gray-600 rounded-lg text-gray-300 hover:bg-gray-800 transition w-fit self-center sm:self-auto"
           >
             End Chat
           </button>
+
         </div>
 
-        {/* Chat Window - this scrolls */}
-        <div className="flex-1 min-h-0 overflow-y-auto rounded-xl bg-gray-800/50 border border-gray-700 shadow-inner">
-          <div className="flex flex-col gap-3 p-4">
+        {/* Chat area */}
+        <div className="flex-1 min-h-0 overflow-y-auto rounded-xl bg-gray-800/40 border border-gray-700">
+          <div className="flex flex-col gap-3 p-3 sm:p-4">
             {messages.length === 0 && (
-              <div className="text-gray-500 text-center mt-8">
+              <div className="text-gray-500 text-center mt-8 text-sm">
                 No messages yet — ask something about the document.
               </div>
             )}
@@ -157,24 +165,18 @@ export default function ChatPage() {
             {messages.map((m, i) => (
               <div
                 key={i}
-                className={`w-full flex ${
+                className={`flex ${
                   m.role === "user" ? "justify-end" : "justify-start"
                 }`}
               >
                 <div
-                  className={`
-                    max-w-[80%]
-                    break-words
-                    p-3
-                    rounded-xl
-                    ${
-                      m.role === "user"
-                        ? "bg-blue-600 text-white"
-                        : "bg-gray-700 text-gray-200"
-                    }
-                  `}
+                  className={`max-w-[85%] sm:max-w-[75%] break-words p-3 rounded-xl text-sm sm:text-base ${
+                    m.role === "user"
+                      ? "bg-blue-600 text-white"
+                      : "bg-gray-700 text-gray-200"
+                  }`}
                 >
-                  <b className="block text-xs opacity-70 mb-1">
+                  <b className="block text-[10px] sm:text-xs opacity-70 mb-1">
                     {m.role === "user" ? "You" : "AI"}
                   </b>
                   <div className="whitespace-pre-wrap">{m.text}</div>
@@ -186,27 +188,28 @@ export default function ChatPage() {
           </div>
         </div>
 
-        {/* Input Area - stays fixed at bottom */}
-        <div className="mt-4">
+        {/* Input bar */}
+        <div className="mt-3 sm:mt-4">
           <div className="flex gap-2">
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-              placeholder="Ask a question..."
-              className="flex-1 bg-gray-800 text-gray-200 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+              placeholder="Ask something..."
               disabled={loading}
+              className="flex-1 bg-gray-800 text-gray-200 border border-gray-700 rounded-lg px-3 sm:px-4 py-2 text-sm sm:text-base focus:ring-2 focus:ring-blue-600"
             />
 
             <button
               onClick={sendMessage}
               disabled={loading}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 rounded-lg font-medium transition disabled:opacity-50"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 sm:px-6 rounded-lg font-medium text-sm sm:text-base disabled:opacity-50"
             >
-              {loading ? "Thinking…" : "Send"}
+              {loading ? "…" : "Send"}
             </button>
           </div>
         </div>
+
       </div>
     </main>
   );

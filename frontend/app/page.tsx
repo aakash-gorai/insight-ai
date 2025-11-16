@@ -36,12 +36,12 @@ export default function UploadPage() {
     }
 
     if (file && !allowedTypes.includes(file.type)) {
-      toast.error("Invalid file type. Only PDF, DOCX, and TXT are allowed.");
+      toast.error("Invalid file type. Only PDF, DOCX, and TXT.");
       return;
     }
 
     if (url && !isValidUrl(url)) {
-      toast.error("Please enter a valid URL starting with http:// or https://");
+      toast.error("Invalid URL. Must start with http:// or https://");
       return;
     }
 
@@ -52,6 +52,7 @@ export default function UploadPage() {
 
     try {
       setLoading(true);
+
       const res = await axios.post(`${api}/upload`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
@@ -59,88 +60,91 @@ export default function UploadPage() {
       if (res.data.session_id) {
         sessionStorage.setItem("session_id", res.data.session_id);
         sessionStorage.setItem("source_name", file?.name || url || "Raw Text");
+
         toast.success("Uploaded! Redirecting...");
         router.push("/chat");
       } else {
         toast.error("Upload failed: no session ID returned.");
       }
     } catch (err: any) {
-      toast.error(err?.response?.data?.detail || "Upload failed");
+      toast.error(err?.response?.data?.detail || "Upload failed.");
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-black via-gray-900 to-gray-800 px-4 py-10">
-      <div className="w-full max-w-lg bg-gray-900/80 backdrop-blur-xl p-6 sm:p-8 rounded-2xl shadow-xl border border-gray-800">
+    <main className="flex flex-col min-h-[100dvh] overflow-hidden bg-gradient-to-b from-black via-gray-900 to-gray-800">
+      <div className="w-full max-w-lg mx-auto flex flex-col flex-1 min-h-0 px-4 py-10">
+        {/* Card */}
+        <div className="w-full bg-gray-900/80 backdrop-blur-xl p-6 sm:p-8 rounded-2xl shadow-xl border border-gray-800">
+          <h1 className="text-3xl sm:text-4xl font-bold mb-2 text-white text-center">
+            💡 InsightAI
+          </h1>
+          <p className="text-sm text-gray-400 mb-6 text-center">
+            Upload a file, enter a URL, or paste text to start chatting.
+          </p>
 
-        <h1 className="text-3xl sm:text-4xl font-bold mb-2 text-white text-center">
-          💡 InsightAI
-        </h1>
-        <p className="text-sm text-gray-400 mb-6 text-center">
-          Upload a file, enter a webpage URL, or paste text to start chatting.
-        </p>
+          <div className="space-y-6">
 
-        <div className="space-y-6">
+            {/* File Upload */}
+            <label className="block">
+              <span className="text-sm font-medium text-gray-300">Upload file</span>
+              <input
+                type="file"
+                accept=".pdf,.docx,.txt"
+                onChange={(e) => {
+                  const selected = e.target.files?.[0] || null;
+                  if (selected && !allowedTypes.includes(selected.type)) {
+                    toast.error("Only PDF, DOCX, TXT allowed.");
+                    e.target.value = "";
+                    return;
+                  }
+                  setFile(selected);
+                }}
+                className="mt-2 w-full text-gray-200 file:bg-gray-800 file:border-0 file:px-4 file:py-2 
+                file:rounded-lg file:text-gray-300 file:hover:bg-gray-700 bg-gray-800 border border-gray-700 rounded-lg p-2"
+              />
+            </label>
 
-          {/* File Upload */}
-          <label className="block">
-            <span className="text-sm font-medium text-gray-300">Upload file</span>
-            <input
-              type="file"
-              accept=".pdf,.docx,.txt"
-              onChange={(e) => {
-                const selected = e.target.files?.[0] || null;
-                if (selected && !allowedTypes.includes(selected.type)) {
-                  toast.error("Only PDF, DOCX, TXT allowed.");
-                  e.target.value = "";
-                  return;
-                }
-                setFile(selected);
-              }}
-              className="mt-2 w-full text-gray-200 file:bg-gray-800 file:border-0 file:px-4 file:py-2 
-              file:rounded-lg file:text-gray-300 file:hover:bg-gray-700 bg-gray-800 border border-gray-700 rounded-lg p-2"
-            />
-          </label>
+            {/* URL Input */}
+            <label className="block">
+              <span className="text-sm font-medium text-gray-300">Enter a URL</span>
+              <input
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+                placeholder="https://example.com/article"
+                className="mt-2 w-full bg-gray-800 text-gray-200 border border-gray-700 p-3 rounded-lg 
+                focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </label>
 
-          {/* URL Input */}
-          <label className="block">
-            <span className="text-sm font-medium text-gray-300">Enter a URL</span>
-            <input
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              placeholder="https://example.com/article"
-              className="mt-2 w-full bg-gray-800 text-gray-200 border border-gray-700 p-3 rounded-lg 
-              focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </label>
+            {/* Text Input */}
+            <label className="block">
+              <span className="text-sm font-medium text-gray-300">Paste raw text</span>
+              <textarea
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                placeholder="Paste text here..."
+                className="mt-2 w-full bg-gray-800 text-gray-200 border border-gray-700 p-3 rounded-lg 
+                h-32 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </label>
 
-          {/* Text Input */}
-          <label className="block">
-            <span className="text-sm font-medium text-gray-300">Paste raw text</span>
-            <textarea
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              placeholder="Paste text here..."
-              className="mt-2 w-full bg-gray-800 text-gray-200 border border-gray-700 p-3 rounded-lg 
-              h-32 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </label>
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
+              <button
+                onClick={handleUpload}
+                disabled={loading}
+                className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg 
+                font-medium transition disabled:opacity-50 text-center"
+              >
+                {loading ? "Uploading..." : "Upload & Chat"}
+              </button>
 
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
-            <button
-              onClick={handleUpload}
-              disabled={loading}
-              className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg 
-              font-medium transition disabled:opacity-50 text-center"
-            >
-              {loading ? "Uploading..." : "Upload & Chat"}
-            </button>
-
-            <p className="text-xs text-gray-500 text-center sm:text-left">
-              Sessions expire after 15 minutes of inactivity.
-            </p>
+              <p className="text-xs text-gray-500 text-center sm:text-left">
+                Sessions expire after 15 minutes of inactivity.
+              </p>
+            </div>
           </div>
         </div>
       </div>

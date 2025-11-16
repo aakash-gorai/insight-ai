@@ -41,7 +41,7 @@ export default function ChatPage() {
     return () => window.removeEventListener("beforeunload", handleUnload);
   }, []);
 
-  // Scroll to bottom
+  // Scroll bottom
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   }, [messages]);
@@ -50,7 +50,7 @@ export default function ChatPage() {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const IDLE_TIMEOUT = 15 * 60 * 1000; // 15 min
+    const IDLE_TIMEOUT = 15 * 60 * 1000;
     const session_id = sessionStorage.getItem("session_id");
     if (!session_id) return;
 
@@ -121,7 +121,7 @@ export default function ChatPage() {
       : "your document";
 
   return (
-    <main className="flex flex-col h-screen bg-gradient-to-b from-black via-gray-900 to-gray-800 px-3 sm:px-6 py-4 text-gray-200">
+    <main className="flex flex-col h-[100svh] bg-gradient-to-b from-black via-gray-900 to-gray-800 px-3 sm:px-6 py-4 text-gray-200">
       <div className="w-full max-w-3xl mx-auto flex flex-col h-full min-h-0 rounded-2xl bg-gray-900/70 backdrop-blur-xl shadow-xl border border-gray-800 p-4 sm:p-6">
 
         {/* Header */}
